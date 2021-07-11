@@ -1,27 +1,30 @@
 const usersModel = require('../models/users.model')
-const bcrypt = require ('bcrypt')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 
 
-function signUp (req, res) {
+function signUp(req, res) {
   const hashed_pwd = bcrypt.hashSync(req.body.pwd, 10)
-  
+
   const hashed_body = {
-    name: req.body.name,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    phoneNumber: req.body.phoneNumber,
     email: req.body.email,
     pwd: hashed_pwd,
-    admin: req.body.admin
   }
 
   usersModel.create(hashed_body)
     .then((user) => {
 
       const insideToken = {
-        name: user.name,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        phoneNumber: user.phoneNumber,
         id: user._id,
-        email: user.email,
-        admin: user.admin
+        email: user.email
+
       }
 
       const token = jwt.sign(
@@ -31,7 +34,9 @@ function signUp (req, res) {
 
       const resUser = {
         id: user._id,
-        name: user.name,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        phoneNumber: user.phoneNumber,
         email: user.email,
         token: token
       }
@@ -43,9 +48,9 @@ function signUp (req, res) {
     })
 }
 
-function login (req, res) {
+function login(req, res) {
 
-  usersModel.findOne({email: req.body.email})
+  usersModel.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) res.json('Can not find the email')
 
@@ -53,13 +58,14 @@ function login (req, res) {
         req.body.pwd,
         user.pwd,
         (err) => {
-          if(err) res.json('Invalid Password')
+          if (err) res.json('Invalid Password')
 
           const insideToken = {
-            name: user.name,
-            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            phoneNumber: user.phoneNumber,
             id: user._id,
-            admin: user.admin
+            email: user.email,
           }
 
           const token = jwt.sign(
@@ -68,12 +74,14 @@ function login (req, res) {
           )
 
           resUser = {
-            name: user.name,
-            email: user.email,
             id: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            phoneNumber: user.phoneNumber,
+            email: user.email,
             token: token
           }
-          
+
           res.json(resUser)
         })
 

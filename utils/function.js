@@ -19,13 +19,7 @@ function auth(req, res, next) {
   })
 }
 
-function admin(req, res, next) {
-  console.log(res.locals.admin);
-  if (!res.locals.admin) res.json('NO ADMIN') 
-  next() 
-}
 
 module.exports = {
-  admin,
   auth
 }
