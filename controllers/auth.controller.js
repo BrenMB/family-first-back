@@ -1,95 +1,67 @@
-const usersModel = require('../models/users.model')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const usersModel = require("../models/users.model");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
+async function signUp(req, res) {
+  try {
+    const pwd = await bcrypt.hash(req.body.pwd, 10)
+    const user = await usersModel.create({
+      name: req.body.name,
+      email: req.body.email,
+      pwd
+    });
 
-
-function signUp(req, res) {
-  const hashed_pwd = bcrypt.hashSync(req.body.pwd, 10)
-
-  const hashed_body = {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
-    pwd: hashed_pwd,
-  }
-
-  usersModel.create(hashed_body)
-    .then((user) => {
-
-      const insideToken = {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        phoneNumber: user.phoneNumber,
+    const token = jwt.sign(
+      {
+        name: user.name,
         id: user._id,
-        email: user.email
-
-      }
-
-      const token = jwt.sign(
-        insideToken,
-        process.env.SECRET
-      )
-
-      const resUser = {
-        id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        phoneNumber: user.phoneNumber,
         email: user.email,
-        token: token
-      }
-      res.json(resUser)
+        admin: user.admin,
+      },
+      process.env.SECRET
+    );
 
-    })
-    .catch((err) => {
-      res.json(err)
-    })
+    return res.json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      token: token,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
 }
 
-function login(req, res) {
+async function login(req, res) {
+  try {
+    const user = await usersModel.findOne({ email: req.body.email })
 
-  usersModel.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) res.json('Can not find the email')
+    if (!user) return res.json("Can not find the email");
 
-      bcrypt.compare(
-        req.body.pwd,
-        user.pwd,
-        (err) => {
-          if (err) res.json('Invalid Password')
+    bcrypt.compare(req.body.pwd, user.pwd, (err, result) => {
+      if (!result) {
+        return res.json({ error: `wrong password for ${req.body.email}` })
+      }
+      const token = jwt.sign({
+        name: user.name,
+        email: user.email,
+        id: user._id,
+        admin: user.admin,
+      }, process.env.SECRET);
 
-          const insideToken = {
-            firstname: user.firstname,
-            lastname: user.lastname,
-            phoneNumber: user.phoneNumber,
-            id: user._id,
-            email: user.email,
-          }
-
-          const token = jwt.sign(
-            insideToken,
-            process.env.SECRET,
-          )
-
-          resUser = {
-            id: user._id,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            phoneNumber: user.phoneNumber,
-            email: user.email,
-            token: token
-          }
-
-          res.json(resUser)
-        })
-
+      res.json({
+        name: user.name,
+        email: user.email,
+        id: user._id,
+        token: token,
+      })
     })
-    .catch((err) => console.error(err))
+  } catch (error) {
+    res.status(500).json(error);
+  }
 }
 
 module.exports = {
   signUp,
-  login
-}
+  login,
+};
