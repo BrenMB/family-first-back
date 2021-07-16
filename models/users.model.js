@@ -3,12 +3,12 @@ const mongoose = require('mongoose')
 
 const usersSchema = new mongoose.Schema({
 
-  firstname: {
+  firstName: {
     type: String,
     required: [true, 'Your user name cannot be blank.'],
 
   },
-  lastname: {
+  lastName: {
     type: String,
     required: [true, 'Your user lastname cannot be blank.'],
 

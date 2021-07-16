@@ -6,25 +6,31 @@ async function signUp(req, res) {
   try {
     const pwd = await bcrypt.hash(req.body.pwd, 10)
     const user = await usersModel.create({
-      name: req.body.name,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
       email: req.body.email,
-      pwd
+      pwd: pwd,
     });
 
     const token = jwt.sign(
       {
-        name: user.name,
-        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
         email: user.email,
-        admin: user.admin,
+        id: user._id,
+
       },
       process.env.SECRET
     );
 
     return res.json({
-      id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
       email: user.email,
+      id: user._id,
       token: token,
     });
   } catch (error) {
@@ -36,7 +42,7 @@ async function login(req, res) {
   try {
     const user = await usersModel.findOne({ email: req.body.email })
 
-    if (!user) return res.json("Can not find the email");
+    if (!user) return res.json({ error: `wrong email ${req.body.email}` });
 
     bcrypt.compare(req.body.pwd, user.pwd, (err, result) => {
       if (!result) {
@@ -46,7 +52,7 @@ async function login(req, res) {
         name: user.name,
         email: user.email,
         id: user._id,
-        admin: user.admin,
+
       }, process.env.SECRET);
 
       res.json({

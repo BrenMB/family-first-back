@@ -14,7 +14,7 @@ function auth(req, res, next) {
     (err, insideToken) => {
       if (err) res.json('Token not valid')
       res.locals.id = insideToken.id
-      res.locals.admin = insideToken.admin
+    
       next()
   })
 }
