@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+//defino el formato de child
 
 const usersSchema = new mongoose.Schema({
 
