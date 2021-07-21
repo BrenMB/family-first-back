@@ -35,6 +35,7 @@ async function signUp(req, res) {
       token: token,
     });
   } catch (error) {
+    console.error(error)
     res.status(500).json(error);
   }
 }
@@ -68,7 +69,27 @@ async function login(req, res) {
   }
 }
 
+async function addGuest(req, res) {
+  try {
+    const pwd = await bcrypt.hash(req.body.pwd, 10)
+
+    //res.local.user
+    const user = await usersModel.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+      email: req.body.email,
+      pwd: pwd,
+    });
+
+    return res.json({ id: user._id });
+  } catch (error) {
+    console.error(error)
+    res.status(500).json(error);
+  }
+}
 module.exports = {
   signUp,
   login,
+  addGuest,
 };

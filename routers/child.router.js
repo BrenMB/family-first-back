@@ -1,10 +1,10 @@
 const childRouter = require('express').Router()
 
-const { auth } = require('../utils/function')
+const { authVerifier } = require('../utils/function')
 const { createChild } = require('../controllers/child.controller')
 
 //subrutas
-childRouter.post('/', auth, createChild)
+childRouter.post('/', authVerifier, createChild)
 
 
 module.exports = childRouter  

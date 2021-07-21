@@ -27,6 +27,10 @@ const usersSchema = new mongoose.Schema({
   pwd: {
     type: String,
     required: [true, 'Your email cannot be blank']
+  },
+  child: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'child'
   }
 })
 

@@ -1,16 +1,12 @@
 const usersModel = require('../models/users.model')
 
-function seeYourUser(req, res) {
-  const userId = res.locals.id
-  usersModel.findById(userId)
-    .then(
-      function deletepwd(user) {
-        user.pwd = ""
-        return res.json(user)
-      })
-//ASK FOR DELETE PWD 
-
-    .catch((err) => res.json(err))
+async function seeYourUser(req, res) {
+  try {
+    const user = await usersModel.findById(res.locals.user._id, '-pwd')
+    return res.json(user)
+  } catch (error) {
+    res.json(err)
+  }
 }
 
 function modifyUser(req, res) {

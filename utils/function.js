@@ -1,25 +1,18 @@
 const jwt = require('jsonwebtoken')
+const userModel = require('../models/users.model')
 
-function auth(req, res, next) {
-  /*
-    req.body
-    req.query
-    req.params
-    req.headers // req.headers.token
-  */
-
-  jwt.verify(
-    req.headers.token, 
-    process.env.SECRET, 
-    (err, insideToken) => {
-      if (err) res.json('Token not valid')
-      res.locals.id = insideToken.id
-    
-      next()
-  })
+async function authVerifier(req, res, next) {
+  try {
+    const token = await jwt.verify(req.headers.token, process.env.SECRET)
+    res.locals.user = await userModel.findById(token.id)
+    next()
+  } catch (error) {
+    console.log(error)
+    return res.status(403).json({ msg: 'Not Authorized' })
+  }
 }
 
 
 module.exports = {
-  auth
+  authVerifier
 }

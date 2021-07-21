@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 const childSchema = new mongoose.Schema({
-
   firstName: {
     type: String,
     required: [true, 'Your user name cannot be blank.'],
@@ -23,18 +22,13 @@ const childSchema = new mongoose.Schema({
     enum: ["Male", "Female"]
 
   },
-  inviteeEmail: {
-    type: String,
-    required: [true, 'Your email cannot be blank']
-  },
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "usersModel"
+      ref: "users"
     }
   ]
 })
 
 const childModel = mongoose.model('child', childSchema);
-
 module.exports = childModel
