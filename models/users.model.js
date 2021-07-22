@@ -38,15 +38,3 @@ const usersModel = mongoose.model('users', usersSchema);
 
 module.exports = usersModel
 
-
-//Con esta expresión regular puedes validar cualquier dirección de correo elecrónico que contenga caracteres Unicode:
-
-
-//enum: {
-/* values: ['lateshift', 'earlyshift'],
- message: '{VALUE} is not supported'
-*/
-/*
-/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()
-
-*/

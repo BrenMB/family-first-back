@@ -1,7 +1,7 @@
 const childModel = require('../models/child.model')
 const usersModel = require('../models/users.model')
 
-async function createChild( req, res ) {
+async function createChild(req, res) {
   try {
     const child = await childModel.create({
       firstName: req.body.firstName,
@@ -25,6 +25,18 @@ async function createChild( req, res ) {
   }
 }
 
+async function filterChild(req, res) {
+  try {
+    const childrenFiltered = await childModel.find({ users: res.locals.user._id })
+    return res.json(childrenFiltered)
+
+  } catch (error) {
+    res.json(error)
+  }
+}
+
+
 module.exports = {
   createChild,
+  filterChild,
 }

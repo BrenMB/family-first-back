@@ -30,7 +30,6 @@ const todoSchema = new mongoose.Schema({
     enum: ["Created", "Assignee", "In progress", "Done"]
   },
 
-
 })
 
 const todoModel = mongoose.model('todo', todoSchema);

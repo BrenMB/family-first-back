@@ -6,7 +6,6 @@ const usersRouter = require('./users.router')
 const childRouter = require('./child.router')
 const todoRouter = require('./todo.router')
 
-//asigno las rutas primarias y en el segundo parametro invoco las subrutas
 
 router.use('/auth', authRouter)
 router.use( '/users', usersRouter)

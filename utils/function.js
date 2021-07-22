@@ -12,7 +12,6 @@ async function authVerifier(req, res, next) {
   }
 }
 
-
 module.exports = {
   authVerifier
 }
