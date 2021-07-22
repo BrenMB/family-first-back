@@ -3,14 +3,10 @@ const todoModel = require('../models/todo.model')
 async function createTodo(req, res) {
   try {
     const todo = await todoModel.create({
-      childId: req.body.childId,
-      createdBy: res.locals.user._id,
+      childId: res.locals.user.child[0],
       title: req.body.title,
       description: req.body.description,
-      creationDate: req.body.creationDate,
-      endDate: req.body.endDate,
-      assignee: req.body.assignee,//name and id??
-      state: req.body.state
+      isDone: req.body.isDone
     })
     return res.json(todo)
 
@@ -20,13 +16,22 @@ async function createTodo(req, res) {
   }
 }
 
+async function seeTodos(req, res) {
+  try {
+    const todos = await todoModel.find({childId: res.locals.user.child[0]})
+    return res.json(todos)
+  } catch (error) {
+    res.json(error)
+  }
+}
+
 async function seeTodo(req, res) {
   try {
     const todo = await todoModel.findById(req.params.todoId)
     return res.json(todo)
 
   } catch (error) {
-    res.json(err)
+    res.json(error)
   }
 }
 
@@ -71,6 +76,7 @@ async function deleteTodo(req, res) {
 
 module.exports = {
   createTodo,
+  seeTodos,
   seeTodo,
   filterTodo,
   updateTodo,
