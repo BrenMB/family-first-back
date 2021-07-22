@@ -1,4 +1,5 @@
 
+
 const usersModel = require('../models/users.model')
 
 async function seeYourUser(req, res) {
@@ -19,9 +20,20 @@ function modifyUser(req, res) {
       res.json(err)
     })
 }
+ async function getChildrenOfUser(req,res){
+  try {
+    const user = await usersModel.findById(res.locals.user._id)
+    .populate('child')
+   
+    res.json(user.child)
+  }
+  catch(error) {
+    res.json(error)
+  }
+}
 
 module.exports = {
   seeYourUser,
   modifyUser,
-
+  getChildrenOfUser,
 }

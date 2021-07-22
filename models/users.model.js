@@ -28,10 +28,12 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Your email cannot be blank']
   },
-  child: {
+  child: [
+    {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'child'
-  }
+    }
+  ]
 })
 
 const usersModel = mongoose.model('users', usersSchema);
