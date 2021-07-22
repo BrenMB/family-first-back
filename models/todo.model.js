@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const todoSchema = new mongoose.Schema({
-  createdBy:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"users"
-  },
   childId:{
     type: mongoose.Schema.Types.ObjectId,
     ref:"child"
@@ -15,21 +11,10 @@ const todoSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  creationDate: {
-    type: Date,
+  isDone: {
+    type: Boolean,
+    default: false
   },
-  endDate: {
-    type: Date,
-  },
-  assignee: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"users"
-  },
-  state: {
-    type: String,
-    enum: ["Created", "Assignee", "In progress", "Done"]
-  },
-
 })
 
 const todoModel = mongoose.model('todo', todoSchema);

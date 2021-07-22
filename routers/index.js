@@ -8,9 +8,9 @@ const todoRouter = require('./todo.router')
 
 
 router.use('/auth', authRouter)
-router.use( '/users', usersRouter)
-router.use( '/child', childRouter)
-router.use( '/todo', todoRouter)
+router.use('/users', usersRouter)
+router.use('/child', childRouter)
+router.use('/todo', todoRouter)
 
 router.get( '/', (req, res) => {
   res.json({ msg: 'API Alive!' })

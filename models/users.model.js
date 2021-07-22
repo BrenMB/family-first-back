@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 //defino el formato de child
 
 const usersSchema = new mongoose.Schema({
-
   firstName: {
     type: String,
     required: [true, 'Your user name cannot be blank.'],

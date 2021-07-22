@@ -7,6 +7,4 @@ usersRouter.get('/me', authVerifier, seeYourUser)
 usersRouter.put('/:userId', authVerifier, modifyUser)
 usersRouter.get('/:userId/children', authVerifier, getChildrenOfUser)
 
-
-
-module.exports = usersRouter  
+module.exports = usersRouter
